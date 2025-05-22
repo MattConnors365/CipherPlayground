@@ -40,6 +40,11 @@
                             return (T)(object)doubleResult;
                         Console.WriteLine("Invalid input. Please enter a valid number.");
                         break;
+                    case Type t when t == typeof(bool):
+                        if (bool.TryParse(input.ToLower(), out bool boolResult))
+                            return (T)(object)boolResult;
+                        Console.WriteLine("Invalid input. Please enter 'true' or 'false'.");
+                        break;
                     case Type t when t.IsEnum:
                         if (Enum.TryParse(typeof(T), input, ignoreCase: true, out object? enumResult))
                             return (T)enumResult;
