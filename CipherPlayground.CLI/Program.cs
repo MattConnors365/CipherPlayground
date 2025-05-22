@@ -18,6 +18,16 @@ namespace CipherPlayground.CLI
             Console.WriteLine($"Ciphertext: {Ciphertext}");
             string DecryptedText = CaesarCipher.Decrypt(Ciphertext, Key, Mode);
             Console.WriteLine($"Decrypted text: {DecryptedText}");
+
+            var wantsBruteForce = GetUserInput<bool>("Run brute force as well? [true/false]: ", true);
+            if (wantsBruteForce)
+            {
+                Console.WriteLine("\nBrute-force output:");
+                foreach (var result in CaesarCipher.BruteForce(Ciphertext, Mode))
+                {
+                    Console.WriteLine(result);
+                }
+            }
         }
     }
 }
