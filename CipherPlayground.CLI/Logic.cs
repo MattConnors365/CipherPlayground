@@ -1,10 +1,26 @@
-﻿namespace CipherPlayground.CLI
+﻿using System;
+using System.Runtime.CompilerServices;
+
+namespace CipherPlayground.CLI
 {
     internal class Logic
     {
-        public static T GetUserInput<T>(string message, bool acceptEmpty = false, uint? expectedLength = null)
+        public static T GetUserInput<T>(
+            string message,
+            bool acceptEmpty = false,
+            bool acceptWhitespaceOnly = false,
+            uint? expectedLength = null,
+            T? defaultValue = default,
+            [CallerArgumentExpression("defaultValue")] string defaultValueExpression = "")
         {
+            bool hasDefaultValue = !string.IsNullOrEmpty(defaultValueExpression);
+
             if (!message.EndsWith(" ")) { message += " "; }
+            if (hasDefaultValue && defaultValue is not null)
+            {
+                message += $"[Default: {defaultValue}] ";
+            }
+
             while (true)
             {
                 Console.Write(message);
@@ -15,12 +31,32 @@
                     Console.WriteLine("Input cannot be null. Please make a valid input.");
                     continue;
                 }
-                if (string.IsNullOrWhiteSpace(input) && !acceptEmpty)
+
+                if (string.IsNullOrWhiteSpace(input))
                 {
-                    Console.WriteLine("Input cannot be empty. Please make a valid input.");
-                    continue;
+                    if (string.IsNullOrEmpty(input))
+                    {
+                        // Only return defaultValue if caller actually supplied one
+                        if (hasDefaultValue && defaultValue is not null)
+                            return defaultValue;
+
+                        if (!acceptEmpty)
+                        {
+                            Console.WriteLine("Input cannot be empty. Please make a valid input.");
+                            continue;
+                        }
+                    }
+                    else // whitespace but not empty
+                    {
+                        if (!acceptWhitespaceOnly)
+                        {
+                            Console.WriteLine("Input cannot be whitespace only. Please make a valid input.");
+                            continue;
+                        }
+                    }
                 }
-                if (expectedLength != null && input.Length != expectedLength)
+
+                if (expectedLength != null && input!.Length != expectedLength)
                 {
                     Console.WriteLine($"Input must be {expectedLength} characters long. Please make a valid input.");
                     continue;
@@ -41,7 +77,7 @@
                         Console.WriteLine("Invalid input. Please enter a valid number.");
                         break;
                     case Type t when t == typeof(bool):
-                        if (bool.TryParse(input.ToLower(), out bool boolResult))
+                        if (bool.TryParse(input, out bool boolResult))
                             return (T)(object)boolResult;
                         Console.WriteLine("Invalid input. Please enter 'true' or 'false'.");
                         break;

@@ -1,6 +1,7 @@
 ﻿using CipherPlayground.Library;
 using static CipherPlayground.Library.Common;
 using static CipherPlayground.CLI.Logic;
+using static CipherPlayground.CLI.Loop;
 
 namespace CipherPlayground.CLI
 {
@@ -8,26 +9,7 @@ namespace CipherPlayground.CLI
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
-            var Input = GetUserInput<string>("Starting encryption, please enter the plaintext: ");
-            var Key = GetUserInput<int>("Please enter the key [a whole number]: ");
-            var Mode = GetUserInput<CipherMode>("Please enter the cipher mode [Strict, Loose, Preserve]: ");
-            Console.WriteLine($"Input: {Input}");
-
-            string Ciphertext = CaesarCipher.Encrypt(Input, Key, Mode);
-            Console.WriteLine($"Ciphertext: {Ciphertext}");
-            string DecryptedText = CaesarCipher.Decrypt(Ciphertext, Key, Mode);
-            Console.WriteLine($"Decrypted text: {DecryptedText}");
-
-            var wantsBruteForce = GetUserInput<bool>("Run brute force as well? [true/false]: ", true);
-            if (wantsBruteForce)
-            {
-                Console.WriteLine("\nBrute-force output:");
-                foreach (var result in CaesarCipher.BruteForce(Ciphertext, Mode))
-                {
-                    Console.WriteLine(result);
-                }
-            }
+            Run();
         }
     }
 }
