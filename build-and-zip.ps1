@@ -1,5 +1,6 @@
 # Run as `..\build-and-zip.ps1 -ProjectName "CipherPlayground.CLI" -ExecutableName "CipherCLI" -Tag "v1.0.0"` from the project folder
 # The call above: builds a standalone for the 3 big platforms, renames the executables to a simpler CipherCLI, and then packages them individually into zips for GitHub Releases
+# If you have trouble with Powershell: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`
 
 param (
     [string]$ProjectName = "CipherPlayground.CLI",
@@ -11,7 +12,16 @@ $ErrorActionPreference = "Stop"
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $logPath = Join-Path $scriptDir "build.log"
-Start-Transcript -Path $logPath -Force
+
+if ($host.Name -eq "ConsoleHost") {
+    try {
+        Start-Transcript -Path $logPath -Force
+    } catch {
+        Write-Warning "Failed to start transcript: $($_.Exception.Message)"
+    }
+} else {
+    Write-Warning "Transcript skipped: not in interactive console host"
+}
 
 Write-Host "Script Directory: $scriptDir"
 
@@ -23,9 +33,15 @@ if (-not (Test-Path $finalZipOutput)) {
 }
 
 $targets = @(
-    @{ Rid = "win-x64";  Ext = ".exe"; Platform = "win" },
-    @{ Rid = "linux-x64"; Ext = "";     Platform = "linux" },
-    @{ Rid = "osx-x64";   Ext = "";     Platform = "osx" }
+    @{ Rid = "win-x64";           Ext = ".exe"; Platform = "win-x64" },
+    @{ Rid = "win-arm64";         Ext = ".exe"; Platform = "win-arm64" },
+    @{ Rid = "linux-x64";         Ext = "";     Platform = "linux-x64" },
+    @{ Rid = "linux-arm64";       Ext = "";     Platform = "linux-arm64" },
+    @{ Rid = "linux-arm";         Ext = "";     Platform = "linux-arm" },
+    @{ Rid = "linux-musl-x64";    Ext = "";     Platform = "linux-musl-x64" },
+    @{ Rid = "linux-musl-arm64";  Ext = "";     Platform = "linux-musl-arm64" },
+    @{ Rid = "osx-x64";           Ext = "";     Platform = "osx-x64" },
+    @{ Rid = "osx-arm64";         Ext = "";     Platform = "osx-arm64" }
 )
 
 foreach ($target in $targets) {
@@ -36,21 +52,27 @@ foreach ($target in $targets) {
 
     Write-Host "`nPublishing for $platform ($rid)..."
 
+    # Clean previous publish output
     if (Test-Path $publishDir) {
         Remove-Item -Recurse -Force $publishDir
     }
     New-Item -ItemType Directory -Path $publishDir | Out-Null
 
-    try {
-        dotnet publish `
-            -c Release `
-            -r $rid `
-            --self-contained true `
-            -p:PublishSingleFile=true `
-            -p:IncludeNativeLibrariesForSelfExtract=true `
-            -p:EnableCompressionInSingleFile=true `
-            -o $publishDir
+    # Base publish parameters
+    $publishParams = @(
+        "-c", "Release",
+        "-r", $rid,
+        "--self-contained", "true",
+        "-p:IncludeNativeLibrariesForSelfExtract=true",
+        "-p:EnableCompressionInSingleFile=true",
+        "-p:PublishSingleFile=true",
+        "-o", $publishDir
+    )
 
+    # NO UseAppHost parameter for any platform
+
+    try {
+        dotnet publish @publishParams
         Write-Host "Published to $publishDir"
     }
     catch {
@@ -58,6 +80,7 @@ foreach ($target in $targets) {
         continue
     }
 
+    # Find and rename executable if exists
     $foundExe = Get-ChildItem -Path $publishDir -Filter "*$ext" | Where-Object { $_.Name -like "*$ProjectName*$ext" } | Select-Object -First 1
 
     if ($foundExe) {
@@ -69,6 +92,7 @@ foreach ($target in $targets) {
         Write-Warning "Could not find executable to rename in $publishDir"
     }
 
+    # Prepare zip file path
     $zipName = "$ProjectName-$Tag-$platform.zip"
     $zipPath = Join-Path $finalZipOutput $zipName
 
