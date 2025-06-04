@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CipherPlayground.Library", "CipherPlayground.Library\CipherPlayground.Library.csproj", "{B1F07CF3-2405-4E16-88CA-8E8A0BB5D762}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CipherPlayground.CLI", "CipherPlayground.CLI\CipherPlayground.CLI.csproj", "{2C15D03B-92F7-48D3-8CDC-20F6F074F171}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CipherPlayground.API", "CipherPlayground.API\CipherPlayground.API.csproj", "{CB8CFFCB-A800-4F6B-957F-0EA3E5DD8BB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{2C15D03B-92F7-48D3-8CDC-20F6F074F171}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C15D03B-92F7-48D3-8CDC-20F6F074F171}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C15D03B-92F7-48D3-8CDC-20F6F074F171}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB8CFFCB-A800-4F6B-957F-0EA3E5DD8BB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB8CFFCB-A800-4F6B-957F-0EA3E5DD8BB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB8CFFCB-A800-4F6B-957F-0EA3E5DD8BB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB8CFFCB-A800-4F6B-957F-0EA3E5DD8BB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

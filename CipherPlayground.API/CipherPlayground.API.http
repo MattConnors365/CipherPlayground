@@ -1,0 +1,6 @@
+@CipherPlayground.API_HostAddress = http://localhost:5030
+
+GET {{CipherPlayground.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
