@@ -1,14 +1,17 @@
-# Build stage
+# Use the official .NET SDK image for building
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-COPY ../ ./
+# Copy everything from the current context
+COPY . ./
 
-RUN dotnet restore CipherPlayground.API/CipherPlayground.API.csproj
-RUN dotnet publish CipherPlayground.API/CipherPlayground.API.csproj -c Release -o /out --no-restore
+# Restore and publish
+RUN dotnet restore CipherPlayground.API.csproj
+RUN dotnet publish CipherPlayground.API.csproj -c Release -o /out --no-restore
 
-# Runtime stage
+# Use the runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /out ./
+
 ENTRYPOINT ["dotnet", "CipherPlayground.API.dll"]
