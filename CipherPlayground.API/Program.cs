@@ -16,6 +16,15 @@ namespace CipherPlayground.API
             {
                 c.SwaggerDoc("v1", new() { Title = "CipherPlayground API", Version = "v1" });
             });
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowEverywhere", policy =>
+                {
+                    policy.WithOrigins("*")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
 
             var app = builder.Build();
 
@@ -25,6 +34,8 @@ namespace CipherPlayground.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("AllowEverywhere");
 
             app.UseHttpsRedirection();
 
