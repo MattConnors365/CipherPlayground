@@ -46,7 +46,7 @@ namespace CipherPlayground.Library
         {
             int alphabetLength = alphabet.Length;
 
-            for (int key = 1; key < alphabetLength; key++) // skip 0 (original text)
+            for (int key = 0; key < alphabetLength; key++)
             {
                 string attempt = Encrypt(ciphertext, key, mode);
                 yield return $"Key {key:D2}: {attempt}";
