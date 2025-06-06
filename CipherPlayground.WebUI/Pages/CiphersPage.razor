@@ -1,0 +1,36 @@
+﻿@page "/ciphers"
+
+<h3>Cipher Playground</h3>
+
+<div class="mb-3">
+    <label for="cipher-select" class="form-label">Select Cipher Type:</label>
+    <select id="cipher-select" class="form-select" @bind="cipherType">
+        <option selected value="">-- Choose a cipher type --</option>
+        <option>Caesar Cipher</option>
+        <option>Vigenère Cipher</option>
+        <option>A1Z26 Cipher</option>
+    </select>
+</div>
+
+<div class="mt-3">
+    @if (cipherType == "Caesar Cipher")
+    {
+		<CaesarCipher />
+    }
+    else if (cipherType == "A1Z26 Cipher")
+    {
+        <A1Z26Cipher />
+    }
+    else if (cipherType == "Vigenère Cipher")
+    {
+        <VigenereCipher />
+    }
+    else
+    {
+        <p>Please select a cipher type to see the component.</p>
+    }
+</div>
+
+@code {
+    private string cipherType = "";
+}

@@ -1,0 +1,51 @@
+﻿<h4>Caesar Cipher</h4>
+
+<label for="textField" class="form-label mt-2">Text:</label>
+<input id="textField" class="form-control" @bind="InputText" required placeholder="Enter text" />
+
+<label for="keyField" class="form-label mt-2">Key:</label>
+<input id="keyField" class="form-control mt-2" @bind="Key" type="number" placeholder="Enter key" />
+
+<label for="modeField" class="form-label mt-2">Mode:</label>
+<input id="modeField" class="form-control mt-2" @bind="Mode" type="number" placeholder="0 for Strict, 1 for Loose, 2 for Preserve (Default)" />
+
+
+<button class="btn btn-primary mt-2" @onclick="Encrypt">Encrypt</button>
+<button class="btn btn-secondary mt-2" @onclick="Decrypt">Decrypt</button>
+<button class="btn btn-success mt-2" @onclick="Bruteforce">Bruteforce</button>
+
+<p class="mt-2"><strong>Result:</strong> @Result</p>
+
+@code {
+    private string InputText;
+    private int Key;
+    private int Mode = 2; // Default to Preserve mode
+    private string Result = "";
+
+    private HttpClient client = new HttpClient();
+    private object Payload()
+    {
+        return new
+        {
+            Text = string.IsNullOrEmpty(InputText) ? "Hello" : InputText,
+            Key = Key,
+            Mode = Mode
+        };
+    }
+
+    private async Task Encrypt()
+    {
+        var response = await client.PostAsJsonAsync("https://cipherplayground-api.onrender.com/api/caesar/encrypt", Payload());
+        Result = await response.Content.ReadAsStringAsync();
+    }
+    private async Task Decrypt()
+    {
+        var response = await client.PostAsJsonAsync("https://cipherplayground-api.onrender.com/api/caesar/decrypt", Payload());
+        Result = await response.Content.ReadAsStringAsync();
+    }
+    private async Task Bruteforce()
+    {
+        var response = await client.PostAsJsonAsync("https://cipherplayground-api.onrender.com/api/caesar/bruteforce", Payload());
+        Result = await response.Content.ReadAsStringAsync();
+    }
+}
