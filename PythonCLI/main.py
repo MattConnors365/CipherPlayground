@@ -1,13 +1,13 @@
 # This is a simple demonstration of using the API of the project with a Python CLI application.
 
-from cipher_client import CaesarCipherClient, VigenereCipherClient, A1Z26CipherClient
+from cipher_client import CaesarCipherClient, VigenereCipherClient, A1Z26CipherClient, AtbashCipherClient
 
 def main():
     print("This is a simple demonstration of using the API of the project with a Python CLI application.")
     print("You can use the cipher_client module to interact with the API.")
     print("For example, you can call the encrypt function to encrypt a message.")
 
-    switch = input("Cipher (caesar, vigenere, a1z26): ").strip().lower()
+    switch = input("Cipher (caesar, vigenere, a1z26, atbash): ").strip().lower()
 
     match switch:
         case "caesar":
@@ -49,6 +49,10 @@ def main():
                     print(A1Z26CipherClient.encrypt(text, mode, character_delimiter, word_delimiter))
                 case "d" | "decrypt":
                     print(A1Z26CipherClient.decrypt(text, mode, character_delimiter, word_delimiter))
+        case "atbash":
+            text = input("Enter text: ")
+            mode = int(input("Mode (0 for Strict, 1 for Loose, 2 for Preserve): "))
+            print(AtbashCipherClient.use(text, mode))
         case _:
             print("Invalid cipher type. Please choose from caesar, vigenere, or a1z26.")
 

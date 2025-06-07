@@ -47,3 +47,11 @@ class A1Z26CipherClient:
     def decrypt(cls, text: str, mode: int = 2, character_delimiter: str = "-", word_delimiter: str = " ") -> str:
         response = requests.post(f"{cls.url}decrypt/", json={"Text": text, "Mode": mode, "CharDelimiter": character_delimiter, "WordDelimiter": word_delimiter})
         return response.text
+
+class AtbashCipherClient:
+    url = base_url + "atbash/"
+    @classmethod
+    def use(cls, text: str, mode: int = 2) -> str:
+        response = requests.post(f"{cls.url}use/", json={"Text": text, "Mode": mode})
+        return response.text
+    

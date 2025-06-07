@@ -20,6 +20,7 @@ namespace CipherPlayground.CLI
                 config.AddCommand<CaesarCommand>("caesar");
                 config.AddCommand<A1Z26Command>("a1z26");
                 config.AddCommand<VigenereCommand>("vigenere");
+                config.AddCommand<AtbashCommand>("atbash");
             });
 
             app.Run(args);

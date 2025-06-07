@@ -9,6 +9,7 @@
         <option>Caesar Cipher</option>
         <option>Vigenère Cipher</option>
         <option>A1Z26 Cipher</option>
+		<option>Atbash Cipher</option>
     </select>
 </div>
 
@@ -25,6 +26,10 @@
     {
         <VigenereCipher />
     }
+    else if (cipherType == "Atbash Cipher")
+    {
+        <AtbashCipher />
+	}
     else
     {
         <p>Please select a cipher type to see the component.</p>

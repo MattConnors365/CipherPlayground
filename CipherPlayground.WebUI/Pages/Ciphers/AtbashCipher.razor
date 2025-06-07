@@ -1,0 +1,28 @@
+﻿<h3>AtbashCipher</h3>
+
+<label for="textField" class="form-label mt-2">Text:</label>
+<input id="textField" class="form-control" @bind="InputText" required placeholder="Enter text" />
+
+<label for="modeField" class="form-label mt-2">Mode:</label>
+<input id="modeField" class="form-control mt-2" @bind="Mode" type="number" placeholder="0 for Strict, 1 for Loose, 2 for Preserve (Default)" />
+
+<button class="btn btn-primary mt-2" @onclick="Use">Use</button>
+@code {
+	private string InputText;
+	private int Mode = 2; // Default to Preserve mode
+	private string Result = "";
+	private HttpClient client = new HttpClient();
+	private object Payload()
+	{
+		return new
+		{
+			Text = string.IsNullOrEmpty(InputText) ? "Hello" : InputText,
+			Mode = Mode
+		};
+	}
+	private async Task Use()
+	{
+		var response = await client.PostAsJsonAsync("https://cipherplayground-api.onrender.com/api/atbash/use", Payload());
+		Result = await response.Content.ReadAsStringAsync();
+	}
+}
