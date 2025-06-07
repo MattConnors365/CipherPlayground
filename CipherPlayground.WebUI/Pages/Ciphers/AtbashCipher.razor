@@ -7,6 +7,9 @@
 <input id="modeField" class="form-control mt-2" @bind="Mode" type="number" placeholder="0 for Strict, 1 for Loose, 2 for Preserve (Default)" />
 
 <button class="btn btn-primary mt-2" @onclick="Use">Use</button>
+
+<p class="mt-2"><strong>Result:</strong> @Result</p>
+
 @code {
 	private string InputText;
 	private int Mode = 2; // Default to Preserve mode
