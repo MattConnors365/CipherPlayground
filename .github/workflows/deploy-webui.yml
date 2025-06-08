@@ -1,0 +1,37 @@
+name: Deploy Blazor WebUI
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'CipherPlayground.WebUI/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Build and Deploy WebUI to GitHub Pages
+
+    steps:
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🧰 Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x' # or whatever you're using
+
+      - name: 🛠️ Publish Blazor WebAssembly
+        run: dotnet publish CipherPlayground.WebUI/CipherPlayground.WebUI.csproj -c Release -o output
+
+      - name: 🚚 Move built files (wwwroot)
+        run: |
+          mkdir gh-pages
+          cp -r output/wwwroot/* gh-pages/
+
+      - name: 🚀 Deploy to GitHub Pages (gh-pages branch)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: gh-pages
+          publish_branch: gh-pages
+          force_orphan: true
