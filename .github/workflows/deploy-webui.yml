@@ -21,7 +21,7 @@ jobs:
           dotnet-version: '8.0.x' # or whatever you're using
 
       - name: 🛠️ Publish Blazor WebAssembly
-        run: dotnet publish CipherPlayground.WebUI/CipherPlayground.WebUI.csproj -c Release -o output
+        run: dotnet publish CipherPlayground.WebUI/CipherPlayground.WebUI.csproj -c Release -o output -p:StaticWebAssetBasePath="/CipherPlayground"
 
       - name: 🚚 Move built files (wwwroot)
         run: |
