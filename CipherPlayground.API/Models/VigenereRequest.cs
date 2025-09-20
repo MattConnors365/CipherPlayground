@@ -10,7 +10,6 @@ namespace CipherPlayground.API.Models
         public string? Text { get; set; }
         [Required]
         public string? Key { get; set; }
-        public bool PreserveWhitespace { get; set; } = false;
         public CipherMode Mode { get; set; } = Common.Defaults.DefaultMode;
     }
 }

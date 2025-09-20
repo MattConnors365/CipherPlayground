@@ -30,7 +30,6 @@ namespace CipherPlayground.API.Controllers
             var result = VigenereCipher.Encrypt(
                 request.Text!,
                 request.Key!,
-                request.PreserveWhitespace,
                 request.Mode
             );
             return Ok(result);
@@ -40,9 +39,8 @@ namespace CipherPlayground.API.Controllers
         public IActionResult Decrypt([FromBody] VigenereRequest request)
         {
             var result = VigenereCipher.Decrypt(
-                request.Text,
-                request.Key,
-                request.PreserveWhitespace,
+                request.Text!,
+                request.Key!,
                 request.Mode
             );
             return Ok(result);

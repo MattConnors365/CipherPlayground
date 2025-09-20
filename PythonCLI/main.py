@@ -31,13 +31,12 @@ def main():
             text = input("Enter text: ")
             key = input("Enter key: ")
             mode = int(input("Mode (0 for Strict, 1 for Loose, 2 for Preserve): "))
-            preserve_whitespace = bool(input("Preserve whitespace (true/false)? "))
             operation = input("Encrypt or Decrypt (e/d): ").strip().lower()
             match operation:
                 case "e" | "encrypt":
-                    print (VigenereCipherClient.encrypt(text, key, mode, preserve_whitespace))
+                    print (VigenereCipherClient.encrypt(text, key, mode))
                 case "d" | "decrypt":
-                    print (VigenereCipherClient.decrypt(text, key, mode, preserve_whitespace))
+                    print (VigenereCipherClient.decrypt(text, key, mode))
         case "a1z26":
             text = input("Enter text: ")
             mode = int(input("Mode (0 for Strict, 1 for Loose, 2 for Preserve): "))

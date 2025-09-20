@@ -26,12 +26,12 @@ class VigenereCipherClient:
 
     @classmethod
     def encrypt(cls, text: str, key: str, mode: int = 2, preserve_whitespace: bool = True) -> str:
-        response = requests.post(f"{cls.url}encrypt/", json={"Text": text, "Key": key, "Mode": mode, "PreserveWhitespace": preserve_whitespace})
+        response = requests.post(f"{cls.url}encrypt/", json={"Text": text, "Key": key, "Mode": mode})
         return response.text 
 
     @classmethod
     def decrypt(cls, text: str, key: str, mode: int = 2, preserve_whitespace: bool = True) -> str:
-        response = requests.post(f"{cls.url}decrypt/", json={"Text": text, "Key": key, "Mode": mode, "PreserveWhitespace": preserve_whitespace})
+        response = requests.post(f"{cls.url}decrypt/", json={"Text": text, "Key": key, "Mode": mode})
         return response.text
 
 

@@ -23,7 +23,6 @@ namespace CipherPlayground.CLI.Commands
             }
             var text = settings.Text ?? AnsiConsole.Ask<string>("Enter the text:");
             var key = settings.Key ?? AnsiConsole.Ask<string>("Enter the key:");
-            var preserveWhitespace = settings.PreserveWhitespace ?? AnsiConsole.Confirm("Preserve whitespace in the text?", true);
             var mode = settings.Mode ?? AnsiConsole.Prompt(
                 new SelectionPrompt<CipherMode>()
                     .Title("Select cipher mode:")
@@ -32,10 +31,10 @@ namespace CipherPlayground.CLI.Commands
             switch (option)
             {
                 case "encrypt":
-                    result = VigenereCipher.Encrypt(text, key, preserveWhitespace, mode);
+                    result = VigenereCipher.Encrypt(text, key, mode);
                     break;
                 case "decrypt":
-                    result = VigenereCipher.Decrypt(text, key, preserveWhitespace, mode);
+                    result = VigenereCipher.Decrypt(text, key, mode);
                     break;
             }
             AnsiConsole.MarkupLine($"[green]Text: [/] {result}");
@@ -54,10 +53,6 @@ namespace CipherPlayground.CLI.Commands
             [CommandOption("-k|--key")]
             [Description("Key (string)")]
             public string? Key { get; set; }
-
-            [CommandOption("-w|--preserveWhitespace")]
-            [Description("If the cipher should preserve whitespace")]
-            public bool? PreserveWhitespace { get; set; }
         }
     }
 }

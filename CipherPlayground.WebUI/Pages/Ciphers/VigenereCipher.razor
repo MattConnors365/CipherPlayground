@@ -6,9 +6,6 @@
 <label for="keyField" class="form-label mt-2">Key:</label>
 <input id="keyField" class="form-control mt-2" @bind="Key" placeholder="Enter key" />
 
-<label for="preserveWhitespaceField" class="form-label mt-2">Preserve whitespace?</label>
-<InputCheckbox id="preserveWhitespaceField" class="form-control mt-2" @bind="PreserveWhitespace" />
-
 <label for="modeField" class="form-label mt-2">Mode:</label>
 <input id="modeField" class="form-control mt-2" @bind="Mode" type="number" placeholder="0 for Strict, 1 for Loose, 2 for Preserve (Default)" />
 
@@ -21,7 +18,6 @@
 @code {
     private string InputText;
     private string Key;
-    private bool PreserveWhitespace;
     private int Mode = 2; // Default to Preserve mode
     private string Result = "";
 
@@ -32,7 +28,6 @@
         {
             Text = string.IsNullOrEmpty(InputText) ? "Hello" : InputText,
             Key = string.IsNullOrEmpty(Key) ? "Key" : Key,
-            PreserveWhitespace = PreserveWhitespace,
             Mode = Mode
         };
     }

@@ -8,81 +8,68 @@ namespace CipherPlayground.Library
         private static readonly char[] alphabet = Defaults.DefaultAlphabet;
         public const string defaultPlaintext = Defaults.DefaultPlaintext;
         public const string defaultKey = "KEY";
-
         private static readonly int alphabetLength = alphabet.Length;
-        private static int GetShiftedIndex(int plaintextIndex, int keyIndex, int alphabetLength, bool encrypt)
+
+        private static int GetShiftedIndex(int textIndex, int keyIndex, int alphabetLength, bool encrypt)
         {
             return encrypt
-                ? (plaintextIndex + keyIndex) % alphabetLength // for encryption
-                : (plaintextIndex - keyIndex + alphabetLength) % alphabetLength; // for decryption
+                ? (textIndex + keyIndex) % alphabetLength
+                : (textIndex - keyIndex + alphabetLength) % alphabetLength;
         }
-        public static string Encrypt(string plaintext = defaultPlaintext, string key = defaultKey, bool preserveWhitespace = false, CipherMode mode = Defaults.DefaultMode)
+
+        public static string Encrypt(string plaintext = defaultPlaintext, string key = defaultKey, CipherMode mode = Defaults.DefaultMode)
         {
             int keyCounter = 0;
-
             StringBuilder ciphertext = new();
 
             for (int i = 0; i < plaintext.Length; i++)
             {
-                char p = char.ToUpper(plaintext[i]);
+                char c = char.ToUpper(plaintext[i]);
 
-                if (alphabet.Contains(p))
+                if (alphabet.Contains(c))
                 {
                     char k = char.ToUpper(key[keyCounter % key.Length]);
                     keyCounter++;
 
-                    int pIndex = Array.IndexOf(alphabet, p);
-                    int kIndex = Array.IndexOf(alphabet, k);
+                    int textIndex = Array.IndexOf(alphabet, c);
+                    int keyIndex = Array.IndexOf(alphabet, k);
 
-                    ciphertext.Append(alphabet[GetShiftedIndex(pIndex, kIndex, alphabetLength, true)]);
+                    ciphertext.Append(alphabet[GetShiftedIndex(textIndex, keyIndex, alphabetLength, true)]);
                 }
                 else
                 {
-                    if (char.IsWhiteSpace(p) && preserveWhitespace)
-                    {
-                        ciphertext.Append(plaintext[i]); // preserve space
-                        continue;
-                    }
-                    else
-                    {
-                        HandleNonAlphabetic(p, mode, ciphertext);
-                    }
+                    HandleNonAlphabetic(c, mode, ciphertext);
                 }
             }
+
             return ciphertext.ToString();
         }
-        public static string Decrypt(string ciphertext, string key = defaultKey, bool preserveWhitespace = false, CipherMode mode = Defaults.DefaultMode)
+
+        public static string Decrypt(string ciphertext, string key = defaultKey, CipherMode mode = Defaults.DefaultMode)
         {
             int keyCounter = 0;
             StringBuilder plaintext = new();
 
             for (int i = 0; i < ciphertext.Length; i++)
             {
-                char p = char.ToUpper(ciphertext[i]);
+                char c = char.ToUpper(ciphertext[i]);
 
-                if (alphabet.Contains(p))
+                if (alphabet.Contains(c))
                 {
                     char k = char.ToUpper(key[keyCounter % key.Length]);
                     keyCounter++;
 
-                    int pIndex = Array.IndexOf(alphabet, p);
-                    int kIndex = Array.IndexOf(alphabet, k);
+                    int textIndex = Array.IndexOf(alphabet, c);
+                    int keyIndex = Array.IndexOf(alphabet, k);
 
-                    plaintext.Append(alphabet[GetShiftedIndex(pIndex, kIndex, alphabetLength, false)]);
+                    plaintext.Append(alphabet[GetShiftedIndex(textIndex, keyIndex, alphabetLength, false)]);
                 }
                 else
                 {
-                    if (char.IsWhiteSpace(p) && preserveWhitespace)
-                    {
-                        plaintext.Append(ciphertext[i]); // preserve space
-                        continue;
-                    }
-                    else
-                    {
-                        HandleNonAlphabetic(p, mode, plaintext);
-                    }
+                    HandleNonAlphabetic(c, mode, plaintext);
                 }
             }
+
             return plaintext.ToString();
         }
     }
