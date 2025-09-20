@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace CipherPlayground.Library
 {
     public class Common
@@ -14,5 +16,34 @@ namespace CipherPlayground.Library
             Loose,
             Preserve
         }
+        public static void HandleNonAlphabetic(char c, CipherMode mode, StringBuilder result)
+        {
+            switch (mode)
+            {
+                case CipherMode.Strict:
+                    throw new Exception($"Invalid character '{c}'");
+                case CipherMode.Loose:
+                    // skip character
+                    break;
+                case CipherMode.Preserve:
+                    result.Append(c);
+                    break;
+            }
+        }
+        public static void HandleInvalidToken(string token, CipherMode mode, StringBuilder result)
+        {
+            switch (mode)
+            {
+                case CipherMode.Strict:
+                    throw new Exception($"Invalid token '{token}'");
+                case CipherMode.Loose:
+                    // skip token
+                    break;
+                case CipherMode.Preserve:
+                    result.Append(token);
+                    break;
+            }
+        }
+
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System.Text;
+using static CipherPlayground.Library.Common;
 
 namespace CipherPlayground.Library
 {
     public class AtbashCipher
     {
-        public static string Use(string input, Common.CipherMode mode = Common.Defaults.DefaultMode)
+        public static string Use(string input, CipherMode mode = Defaults.DefaultMode)
         {
-            char[] alphabet = Common.Defaults.DefaultAlphabet;
+            char[] alphabet = Defaults.DefaultAlphabet;
             char[] reversedAlphabet = [..alphabet.Reverse()];
             StringBuilder result = new();
             input = input.ToUpperInvariant(); // Normalize to uppercase for consistency
@@ -18,16 +19,7 @@ namespace CipherPlayground.Library
                 }
                 else
                 {
-                    switch (mode)
-                    {
-                        case Common.CipherMode.Strict:
-                            throw new Exception($"The plaintext must not contain invalid characters. '{c}' is not valid");
-                        case Common.CipherMode.Loose:
-                            continue;
-                        case Common.CipherMode.Preserve:
-                            result.Append(c);
-                            break;
-                    }
+                    HandleNonAlphabetic(c, mode, result);
                 }
             }
             return result.ToString();

@@ -1,4 +1,5 @@
-﻿using static CipherPlayground.Library.Common;
+﻿using System.Text;
+using static CipherPlayground.Library.Common;
 
 namespace CipherPlayground.Library
 {
@@ -8,103 +9,77 @@ namespace CipherPlayground.Library
         public const string defaultCharDelimiter = "-";
         public const string defaultWordDelimiter = " ";
         public const string defaultCiphertext = "8-5-12-12-15";
-        public static string Encrypt(string plaintext = Defaults.DefaultPlaintext, 
-            string charDelimiter = defaultCharDelimiter, string wordDelimiter = defaultWordDelimiter, CipherMode mode = Defaults.DefaultMode)
+        public static string Encrypt(
+            string plaintext = Defaults.DefaultPlaintext,
+            string charDelimiter = defaultCharDelimiter,
+            string wordDelimiter = defaultWordDelimiter,
+            CipherMode mode = Defaults.DefaultMode)
         {
             plaintext = plaintext.ToUpper();
-            string result = string.Empty;
+            var result = new StringBuilder();
+
             for (int i = 0; i < plaintext.Length; i++)
             {
                 char currentChar = plaintext[i];
+
                 if (alphabet.Contains(currentChar))
                 {
                     int currentCharIndex = Array.IndexOf(alphabet, currentChar);
-                    result += (currentCharIndex + 1).ToString() + charDelimiter;
+                    result.Append(currentCharIndex + 1).Append(charDelimiter);
                 }
                 else if (currentChar == ' ')
                 {
-                    result += wordDelimiter;
+                    result.Append(wordDelimiter);
                 }
                 else
                 {
-                    switch (mode)
-                    {
-                        case CipherMode.Strict:
-                            throw new Exception($"The plaintext must not contain invalid characters. '{currentChar}' is not valid");
-                        case CipherMode.Loose:
-                            continue;
-                        case CipherMode.Preserve:
-                            result += currentChar;
-                            break;
-                    }
+                    HandleNonAlphabetic(currentChar, mode, result);
                 }
             }
-            if (result.Length > 0 && result.EndsWith(charDelimiter))
+
+            // clean up trailing delimiters
+            if (result.Length > 0 && result.ToString().EndsWith(charDelimiter))
             {
-                result = result[..^charDelimiter.Length];
+                result.Length -= charDelimiter.Length;
             }
-            if (result.Length > 0)
-            {
-                result = result.Replace(charDelimiter + wordDelimiter, wordDelimiter);
-            }
-            return result;
+            result.Replace(charDelimiter + wordDelimiter, wordDelimiter);
+
+            return result.ToString();
         }
-        public static string Decrypt(string ciphertext = defaultCiphertext, 
-            string charDelimiter = defaultCharDelimiter, string wordDelimiter = defaultWordDelimiter, CipherMode mode = Defaults.DefaultMode)
+        public static string Decrypt(
+            string ciphertext = defaultCiphertext,
+            string charDelimiter = defaultCharDelimiter,
+            string wordDelimiter = defaultWordDelimiter,
+            CipherMode mode = Defaults.DefaultMode)
         {
-            string[] tokens = ciphertext.Split([charDelimiter, wordDelimiter], StringSplitOptions.RemoveEmptyEntries);
-            string result = string.Empty;
-            int index = 0;
+            string[] words = ciphertext.Split(wordDelimiter, StringSplitOptions.None);
+            var result = new StringBuilder();
 
-            while (index < tokens.Length)
+            foreach (var word in words)
             {
-                string token = tokens[index];
+                string[] tokens = word.Split(charDelimiter, StringSplitOptions.RemoveEmptyEntries);
 
-                // Check if this token is a number
-                if (int.TryParse(token, out int number))
+                foreach (var token in tokens)
                 {
-                    int alphabetIndex = number - 1;
+                    if (int.TryParse(token, out int number))
+                    {
+                        int alphabetIndex = number - 1;
 
-                    if (alphabetIndex >= 0 && alphabetIndex < alphabet.Length)
-                    {
-                        result += alphabet[alphabetIndex];
-                    }
-                    else
-                    {
-                        switch (mode)
+                        if (alphabetIndex >= 0 && alphabetIndex < alphabet.Length)
                         {
-                            case CipherMode.Strict:
-                                throw new Exception($"The number {number} is out of valid range.");
-                            case CipherMode.Loose:
-                                // skip
-                                break;
-                            case CipherMode.Preserve:
-                                result += token;
-                                break;
+                            result.Append(alphabet[alphabetIndex]);
+                            continue;
                         }
                     }
-                }
-                else if (ciphertext.Contains(wordDelimiter) && ciphertext.IndexOf(wordDelimiter) == ciphertext.IndexOf(token)) // crude check for word break
-                {
-                    result += ' ';
-                }
-                else
-                {
-                    switch (mode)
-                    {
-                        case CipherMode.Strict:
-                            throw new Exception($"Invalid token '{token}' in ciphertext.");
-                        case CipherMode.Loose:
-                            break;
-                        case CipherMode.Preserve:
-                            result += token;
-                            break;
-                    }
+
+                    HandleInvalidToken(token, mode, result);
                 }
 
-                index++;
+                // restore space between words
+                result.Append(' ');
             }
-            return result;
+
+            return result.ToString().TrimEnd();
         }
     }
 }

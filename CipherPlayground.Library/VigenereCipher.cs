@@ -38,33 +38,14 @@ namespace CipherPlayground.Library
                 }
                 else
                 {
-                    switch (mode)
+                    if (char.IsWhiteSpace(p) && preserveWhitespace)
                     {
-                        case CipherMode.Strict:
-                            if (char.IsWhiteSpace(p) && preserveWhitespace)
-                            {
-                                ciphertext.Append(plaintext[i]); // preserve spaces/punctuation
-                                continue;
-                            }
-                            throw new ArgumentException($"Character '{p}' is not in the alphabet.");
-                        case CipherMode.Loose:
-                            if (char.IsWhiteSpace(p) && preserveWhitespace)
-                            {
-                                ciphertext.Append(plaintext[i]); // preserve spaces/punctuation
-                                continue;
-                            }
-                            continue; // skip characters not in the alphabet
-                        case CipherMode.Preserve:
-                            if (char.IsWhiteSpace(p) && preserveWhitespace)
-                            {
-                                ciphertext.Append(plaintext[i]); // preserve spaces/punctuation
-                                continue;
-                            }
-                            else if (char.IsWhiteSpace(p) && !preserveWhitespace)
-                            {
-                                continue; // skip whitespace characters if not preserving whitespace
-                            }
-                            break;
+                        ciphertext.Append(plaintext[i]); // preserve space
+                        continue;
+                    }
+                    else
+                    {
+                        HandleNonAlphabetic(p, mode, ciphertext);
                     }
                 }
             }
@@ -73,7 +54,6 @@ namespace CipherPlayground.Library
         public static string Decrypt(string ciphertext, string key = defaultKey, bool preserveWhitespace = false, CipherMode mode = Defaults.DefaultMode)
         {
             int keyCounter = 0;
-
             StringBuilder plaintext = new();
 
             for (int i = 0; i < ciphertext.Length; i++)
@@ -92,33 +72,14 @@ namespace CipherPlayground.Library
                 }
                 else
                 {
-                    switch (mode)
+                    if (char.IsWhiteSpace(p) && preserveWhitespace)
                     {
-                        case CipherMode.Strict:
-                            if (char.IsWhiteSpace(p) && preserveWhitespace)
-                            {
-                                plaintext.Append(ciphertext[i]); // preserve spaces/punctuation
-                                continue;
-                            }
-                            throw new ArgumentException($"Character '{p}' is not in the alphabet.");
-                        case CipherMode.Loose:
-                            if (char.IsWhiteSpace(p) && preserveWhitespace)
-                            {
-                                plaintext.Append(ciphertext[i]); // preserve spaces/punctuation
-                                continue;
-                            }
-                            continue; // skip characters not in the alphabet
-                        case CipherMode.Preserve:
-                            if (char.IsWhiteSpace(p) && preserveWhitespace)
-                            {
-                                plaintext.Append(ciphertext[i]); // preserve spaces/punctuation
-                                continue;
-                            }
-                            else if (char.IsWhiteSpace(p) && !preserveWhitespace)
-                            {
-                                continue; // skip whitespace characters if not preserving whitespace
-                            }
-                            break;
+                        plaintext.Append(ciphertext[i]); // preserve space
+                        continue;
+                    }
+                    else
+                    {
+                        HandleNonAlphabetic(p, mode, plaintext);
                     }
                 }
             }

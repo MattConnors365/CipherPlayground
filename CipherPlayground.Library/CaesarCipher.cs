@@ -1,3 +1,4 @@
+using System.Text;
 using static CipherPlayground.Library.Common;
 
 namespace CipherPlayground.Library
@@ -10,7 +11,7 @@ namespace CipherPlayground.Library
             int alphabetLength = alphabet.Length;
             plaintext = plaintext.ToUpper();
 
-            string result = string.Empty;
+            StringBuilder result = new();
 
             for (int i = 0; i < plaintext.Length; i++)
             {
@@ -20,23 +21,15 @@ namespace CipherPlayground.Library
                     int currentCharIndex = Array.IndexOf(alphabet, currentChar);
                     int newIndex = (currentCharIndex + key) % alphabetLength;
                     if (newIndex < 0) { newIndex += alphabetLength; }
-                    result += alphabet[newIndex];
-                } else
+                    result.Append(alphabet[newIndex]);
+                }
+                else
                 {
-                    switch (mode)
-                    {
-                        case CipherMode.Strict:
-                            throw new Exception($"The plaintext must not contain invalid characters. '{currentChar}' is not valid");
-                        case CipherMode.Loose:
-                            continue;
-                        case CipherMode.Preserve:
-                            result += currentChar;
-                            break;
-                    }
+                    HandleNonAlphabetic(currentChar, mode, result);
                 }
             }
 
-            return result;
+            return result.ToString();
         }
         public static string Decrypt(string ciphertext, int key, CipherMode mode = Defaults.DefaultMode)
         {
