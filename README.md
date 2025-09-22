@@ -1,5 +1,7 @@
 # 🔐 CipherPlayground
 
+![.NET Tests](https://github.com/MattConnors365/CipherPlayground/actions/workflows/tests.yml/badge.svg)
+
 A modern .NET-based playground for experimenting with classical encryption algorithms like Caesar, Vigenère, and beyond. Designed as a modular, testable, and deployable solution — ideal for learning, extending, or showcasing foundational crypto techniques.
 
 > 🧪 Built with C# in .NET 8.  
