@@ -9,26 +9,32 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Build and Deploy WebUI to GitHub Pages
+    name: Build and Deploy Blazor WebUI to GitHub Pages
 
     steps:
+      # 1️⃣ Checkout repo
       - name: 📥 Checkout repo
         uses: actions/checkout@v4
 
+      # 2️⃣ Setup .NET
       - name: 🧰 Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x' # or whatever you're using
+          dotnet-version: '8.0.x'
 
+      # 3️⃣ Publish Blazor WASM
       - name: 🛠️ Publish Blazor WebAssembly
-        run: dotnet publish CipherPlayground.WebUI/CipherPlayground.WebUI.csproj -c Release -o output -p:StaticWebAssetBasePath="/CipherPlayground"
+        run: |
+          dotnet publish CipherPlayground.WebUI/CipherPlayground.WebUI.csproj -c Release -o output
 
-      - name: 🚚 Move built files (wwwroot)
+      # 4️⃣ Prepare deployment folder
+      - name: 🚚 Copy published files
         run: |
           mkdir gh-pages
           cp -r output/wwwroot/* gh-pages/
 
-      - name: 🚀 Deploy to GitHub Pages (gh-pages branch)
+      # 5️⃣ Deploy to GitHub Pages
+      - name: 🚀 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
