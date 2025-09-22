@@ -169,23 +169,21 @@ vigenere - Run the Vigenere cipher functionality
                     Console.WriteLine("Starting Vigenere Cipher Playground...");
                     var inputEncrypt = Logic.GetUserInput<string>("Enter the plaintext: ", defaultValue: Defaults.DefaultPlaintext);
                     var keyEncrypt = Logic.GetUserInput<string>("Enter the key: ", defaultValue: VigenereCipher.defaultKey);
-                    var preserveWhitespaceEncrypt = Logic.GetUserInput<bool>("Preserve whitespace? (true/false): ", defaultValue: false);
                     var modeEncrypt = Logic.GetUserInput<CipherMode>("Enter the cipher mode (Strict, Loose, Preserve): ", defaultValue: Defaults.DefaultMode);
                     var echoBack = Logic.GetUserInput<bool>("Echo back the decrypted ciphertext? (true/false): ", defaultValue: true);
 
-                    string ciphertext = VigenereCipher.Encrypt(inputEncrypt, keyEncrypt, preserveWhitespaceEncrypt, modeEncrypt);
+                    string ciphertext = VigenereCipher.Encrypt(inputEncrypt, keyEncrypt, modeEncrypt);
                     Console.WriteLine($"Ciphertext: {ciphertext}");
                     if (echoBack)
                     {
-                        Console.WriteLine($"Decrypted text: {VigenereCipher.Decrypt(ciphertext, keyEncrypt, preserveWhitespaceEncrypt, modeEncrypt)}");
+                        Console.WriteLine($"Decrypted text: {VigenereCipher.Decrypt(ciphertext, keyEncrypt, modeEncrypt)}");
                     }
                     return;
                 case "decrypt":
                     var inputDecrypt = Logic.GetUserInput<string>("Enter the ciphertext: ", defaultValue: VigenereCipher.defaultPlaintext);
                     var keyDecrypt = Logic.GetUserInput<string>("Enter the key: ", defaultValue: VigenereCipher.defaultKey);
-                    var preserveWhitespaceDecrypt = Logic.GetUserInput<bool>("Preserve whitespace? (true/false): ", defaultValue: false);
                     var modeDecrypt = Logic.GetUserInput<CipherMode>("Enter the cipher mode (Strict, Loose, Preserve): ", defaultValue: Defaults.DefaultMode);
-                    Console.WriteLine($"Decrypted text: {VigenereCipher.Decrypt(inputDecrypt, keyDecrypt, preserveWhitespaceDecrypt, modeDecrypt)}");
+                    Console.WriteLine($"Decrypted text: {VigenereCipher.Decrypt(inputDecrypt, keyDecrypt, modeDecrypt)}");
                     return;
             }
         }
