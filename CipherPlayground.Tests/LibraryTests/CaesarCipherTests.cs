@@ -18,7 +18,7 @@ namespace CipherPlayground.Tests.LibraryTests
         [Fact]
         public void Encrypt_WithInvalidCharAndStrict_ThrowsException()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<ArgumentException>(() =>
                 CaesarCipher.Encrypt("ABC XYZ!", 3, CipherMode.Strict));
         }
 
@@ -34,7 +34,7 @@ namespace CipherPlayground.Tests.LibraryTests
         [Fact]
         public void Decrypt_WithInvalidCharAndStrict_ThrowsException()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<ArgumentException>(() =>
                 CaesarCipher.Decrypt("DEF ABC!", 3, CipherMode.Strict));
         }
 

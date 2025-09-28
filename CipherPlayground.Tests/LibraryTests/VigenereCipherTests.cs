@@ -70,7 +70,7 @@ namespace CipherPlayground.Tests.LibraryTests
         [InlineData("WORLD123", CipherMode.Strict)]
         public void Encrypt_WithInvalidCharAndStrict_ThrowsException(string plaintext, CipherMode mode)
         {
-            Assert.Throws<Exception>(() => VigenereCipher.Encrypt(plaintext, VigenereCipher.defaultKey, mode));
+            Assert.Throws<ArgumentException>(() => VigenereCipher.Encrypt(plaintext, VigenereCipher.defaultKey, mode));
         }
 
         [Theory]
@@ -78,7 +78,7 @@ namespace CipherPlayground.Tests.LibraryTests
         [InlineData("WORLD123", CipherMode.Strict)]
         public void Decrypt_WithInvalidCharAndStrict_ThrowsException(string ciphertext, CipherMode mode)
         {
-            Assert.Throws<Exception>(() => VigenereCipher.Decrypt(ciphertext, VigenereCipher.defaultKey, mode));
+            Assert.Throws<ArgumentException>(() => VigenereCipher.Decrypt(ciphertext, VigenereCipher.defaultKey, mode));
         }
 
         // Round-trip encryption/decryption returns original text

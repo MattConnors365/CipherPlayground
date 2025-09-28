@@ -33,7 +33,7 @@ namespace CipherPlayground.Tests.LibraryTests
         [InlineData("WORLD123")]
         public void Use_StrictMode_InvalidCharacter_Throws(string input)
         {
-            Assert.Throws<Exception>(() => AtbashCipher.Use(input, CipherMode.Strict));
+            Assert.Throws<ArgumentException>(() => AtbashCipher.Use(input, CipherMode.Strict));
         }
 
         // Case insensitivity

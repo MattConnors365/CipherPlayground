@@ -73,14 +73,14 @@ namespace CipherPlayground.Tests.LibraryTests
         [InlineData("HELLO!", CipherMode.Strict)]
         public void Encrypt_StrictMode_InvalidCharacter_Throws(string plaintext, CipherMode mode)
         {
-            Assert.Throws<Exception>(() => A1Z26Cipher.Encrypt(plaintext, mode: mode));
+            Assert.Throws<ArgumentException>(() => A1Z26Cipher.Encrypt(plaintext, mode: mode));
         }
 
         [Theory]
         [InlineData("8-5-12-12-15!", CipherMode.Strict)]
         public void Decrypt_StrictMode_InvalidToken_Throws(string ciphertext, CipherMode mode)
         {
-            Assert.Throws<Exception>(() => A1Z26Cipher.Decrypt(ciphertext, mode: mode));
+            Assert.Throws<FormatException>(() => A1Z26Cipher.Decrypt(ciphertext, mode: mode));
         }
 
         // Round-trip encryption/decryption

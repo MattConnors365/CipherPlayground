@@ -47,10 +47,10 @@ namespace CipherPlayground.Library
             return result.ToString();
         }
         public static string Decrypt(
-            string ciphertext = defaultCiphertext,
-            string charDelimiter = defaultCharDelimiter,
-            string wordDelimiter = defaultWordDelimiter,
-            CipherMode mode = Defaults.DefaultMode)
+    string ciphertext = defaultCiphertext,
+    string charDelimiter = defaultCharDelimiter,
+    string wordDelimiter = defaultWordDelimiter,
+    CipherMode mode = Defaults.DefaultMode)
         {
             string[] words = ciphertext.Split(wordDelimiter, StringSplitOptions.None);
             var result = new StringBuilder();
@@ -70,9 +70,16 @@ namespace CipherPlayground.Library
                             result.Append(alphabet[alphabetIndex]);
                             continue;
                         }
-                    }
 
-                    HandleInvalidToken(token, mode, result);
+                        // Value is numeric, but outside alphabet range
+                        throw new ArgumentOutOfRangeException(
+                            nameof(ciphertext),
+                            $"Token '{token}' is outside valid range (1-{alphabet.Length})");
+                    }
+                    else
+                    {
+                        HandleInvalidToken(token, mode, result);
+                    }
                 }
 
                 // restore space between words

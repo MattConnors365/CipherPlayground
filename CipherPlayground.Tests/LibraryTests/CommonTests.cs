@@ -11,7 +11,7 @@ namespace CipherPlayground.Tests.LibraryTests
         public void HandleNonAlphabetic_Strict_Throws(char c, CipherMode mode)
         {
             var sb = new StringBuilder();
-            Assert.Throws<Exception>(() => HandleNonAlphabetic(c, mode, sb));
+            Assert.Throws<ArgumentException>(() => HandleNonAlphabetic(c, mode, sb));
         }
 
         [Theory]
@@ -39,7 +39,7 @@ namespace CipherPlayground.Tests.LibraryTests
         public void HandleInvalidToken_Strict_Throws(string token, CipherMode mode)
         {
             var sb = new StringBuilder();
-            Assert.Throws<Exception>(() => HandleInvalidToken(token, mode, sb));
+            Assert.Throws<FormatException>(() => HandleInvalidToken(token, mode, sb));
         }
 
         [Theory]

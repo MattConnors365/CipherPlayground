@@ -43,10 +43,23 @@ namespace CipherPlayground.CLI.Commands
                 File.WriteAllText(path, content);
                 AnsiConsole.MarkupLine($"[green]File saved successfully to {path}[/]");
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                AnsiConsole.MarkupLine($"[red]Permission denied: {ex.Message}[/]");
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                AnsiConsole.MarkupLine($"[red]Directory not found: {ex.Message}[/]");
+            }
+            catch (IOException ex)
+            {
+                AnsiConsole.MarkupLine($"[red]I/O error: {ex.Message}[/]");
+            }
             catch (Exception ex)
             {
-                AnsiConsole.MarkupLine($"[red]Error saving file: {ex.Message}[/]");
+                AnsiConsole.MarkupLine($"[red]Unexpected error: {ex.Message}[/]");
             }
+
         }
         public static string GetInputSavePath(string? path, string? fileName)
         {

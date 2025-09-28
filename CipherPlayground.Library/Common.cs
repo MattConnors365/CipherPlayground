@@ -21,7 +21,7 @@ namespace CipherPlayground.Library
             switch (mode)
             {
                 case CipherMode.Strict:
-                    throw new Exception($"Invalid character '{c}'");
+                    throw new ArgumentException($"Invalid character '{c}'");
                 case CipherMode.Loose:
                     // skip character
                     break;
@@ -35,7 +35,7 @@ namespace CipherPlayground.Library
             switch (mode)
             {
                 case CipherMode.Strict:
-                    throw new Exception($"Invalid token '{token}'");
+                    throw new FormatException($"Invalid token '{token}'");
                 case CipherMode.Loose:
                     // skip token
                     break;
